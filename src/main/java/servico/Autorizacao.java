@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 
+import org.apache.poi.util.SystemOutLogger;
 import org.json.JSONObject;
 
 import com.mashape.unirest.http.HttpResponse;
@@ -103,7 +104,12 @@ public class Autorizacao {
 						 System.out.println(response.isSuccessful());
 						 System.out.println("Chave Gerada com sucesso!");
 						 UPDATE_CHAVE = "update dominio_api.token_dominio set integration_key = ? where id_loja = ?";
-					}else {
+					}if(!response.isSuccessful()) {
+						
+						JOptionPane.showMessageDialog(null, response.body().source().readUtf8().toString());
+					
+					}
+					else {
 						chave = "";
 						System.out.println(response.isSuccessful());
 //						procedimento pra não dar update se houver chave em branco
@@ -131,7 +137,7 @@ public class Autorizacao {
 					stmt_up.close();
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println("Erro na chave gerada \nou");
 				}
 		
 		return chave;
@@ -190,8 +196,15 @@ public class Autorizacao {
 					
 					client.dispatcher().executorService().shutdown(); // desliga o client
 					client.connectionPool().evictAll();
-					
-
+					if(ret == null) {
+					System.out.println("\n\n*********** Atenção! ***************");
+					System.out.println("Houve uma falha no envio");
+					System.out.println("Mensagem retornada: "+retorno);
+					if(retorno.contains("Invalid Key supplied")) {
+						System.out.println("Favor entrar em contato com o suporte da Dominio solicitando a revisão dos dados!");
+					}
+					System.out.println("************************************\n\n");
+					}
 				} catch (IOException e ) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

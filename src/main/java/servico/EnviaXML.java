@@ -12,15 +12,15 @@ import model.LojaToken;
 
 public class EnviaXML {
 
-	private String NOTASAIDA = "SELECT nsd.id,nsd.id_situacaonfe,nsd.id_notasaida, nsd.xml,chavenfe FROM notasaidanfe nsd join notasaida ns on ns.id = nsd.id_notasaida WHERE nsd.id_situacaonfe = 1 AND (nsd.cofre = 0 OR nsd.cofre is null)AND ns.id_loja = ? and ns.datasaida >= ? ORDER BY 1 DESC LIMIT 10";
+	private String NOTASAIDA = "SELECT nsd.id,nsd.id_situacaonfe,nsd.id_notasaida, nsd.xml,chavenfe FROM notasaidanfe nsd join notasaida ns on ns.id = nsd.id_notasaida WHERE nsd.id_situacaonfe <> 0 AND (nsd.cofre = 0 OR nsd.cofre is null)AND ns.id_loja = ? and ns.datasaida >= ? ORDER BY 1 DESC LIMIT 10";
 	private String UPDATE_NOTASAIDA = "update notasaidanfe set cofre = 1 where id = ?";
 	private String UPDATE_NOTASAIDA_ERRO_XML = "update notasaidanfe set cofre = 2 where id = ?";
 
-	private String NOTAENTRADA = "SELECT id, id_situacaonfe,numeronota, xml, chavenfe FROM notaentradanfe WHERE id_situacaonfe = 1 AND (cofre = 0 OR cofre is null) AND id_loja = ? AND dataentrada::date >= ? ORDER BY 1 DESC LIMIT 10";
+	private String NOTAENTRADA = "SELECT id, id_situacaonfe,numeronota, xml, chavenfe FROM notaentradanfe WHERE id_situacaonfe <> 0 AND (cofre = 0 OR cofre is null) AND id_loja = ? AND dataentrada::date >= ? ORDER BY 1 DESC LIMIT 10";
 	private String UPDATE_NOTAENTRADA = "update notaentradanfe set cofre = 1 where id = ?";
 	private String UPDATE_NOTAENTRADA_ERRO_XML = "update notaentradanfe set cofre = 2 where id = ?";
 
-	private String NFCE = "SELECT v.id, v.id_situacaonfce,v.id_venda, v.xml, v.chavenfce FROM pdv.vendanfce v join pdv.venda pv on v.id_venda = pv.id  WHERE v.id_situacaonfce = 1 AND (v.cofre = 0 OR v.cofre is null) and pv.id_loja = ? and pv.data >= ? ORDER BY 1 DESC LIMIT 10";
+	private String NFCE = "SELECT v.id, v.id_situacaonfce,v.id_venda, v.xml, v.chavenfce FROM pdv.vendanfce v join pdv.venda pv on v.id_venda = pv.id  WHERE v.id_situacaonfce <> 0 AND (v.cofre = 0 OR v.cofre is null) and pv.id_loja = ? and pv.data >= ? ORDER BY 1 DESC LIMIT 10";
 	private String UPDATE_NFCE = "update pdv.vendanfce set cofre = 1 where id = ?";
 	private String UPDATE_NFCE_ERRO_XML = "update pdv.vendanfce set cofre = 2 where id = ?";
 
@@ -58,8 +58,10 @@ public class EnviaXML {
 				if (arq.exists()) { // se o arquivo foi gerado normalmente
 					System.out.println("Arquivo: " + nomeArquivo + " encontrado na pasta");
 					Retorno retornoEnvio = new Retorno();
+					
 					retornoEnvio = aut.enviaXml(loja.getToken(),loja.getIntegration_key(), nomeArquivo); // envia o arquivo
-																										// .xml
+					String retornoAux = retornoEnvio.toString();	
+					System.out.println("Retorno do envio é: " +retornoAux);																				// .xml
 					 if (retornoEnvio.getStatus().getCode().equals("E2")||
 							 retornoEnvio.getStatus().getCode().equals("EA0")||
 							 retornoEnvio.getStatus().getCode().equals("EA3") ) {
@@ -127,7 +129,7 @@ public class EnviaXML {
 					}
 					
 				} else {
-					System.out.println("Retorno: Arquivo n�o encontrado!");
+					System.out.println("Retorno: Arquivo não encontrado!");
 				}
 
 			}
@@ -140,7 +142,7 @@ public class EnviaXML {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 //			e.printStackTrace();
-//			System.out.println(e);
+			System.out.println(e);
 			System.out.println("Falha temporária na conexão...\n");
 			System.out.print("Tentando reconectar");
 			

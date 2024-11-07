@@ -16,11 +16,11 @@ public class EnviaXML {
 	private String UPDATE_NOTASAIDA = "update notasaidanfe set cofre = 1 where id = ?";
 	private String UPDATE_NOTASAIDA_ERRO_XML = "update notasaidanfe set cofre = 2 where id = ?";
 
-	private String NOTAENTRADA = "SELECT id, id_situacaonfe,numeronota, xml, chavenfe FROM notaentradanfe WHERE id_situacaonfe <> 0 AND (cofre = 0 OR cofre is null) AND id_loja = ? AND dataentrada::date >= ? ORDER BY 1 DESC LIMIT 10";
+	private String NOTAENTRADA = "SELECT id, id_situacaonfe,numeronota, xml, chavenfe FROM notaentradanfe WHERE id_situacaonfe <> 0  AND (cofre = 0 OR cofre is null) AND id_loja = ? AND dataentrada::date >= ? ORDER BY 1 DESC LIMIT 10";
 	private String UPDATE_NOTAENTRADA = "update notaentradanfe set cofre = 1 where id = ?";
 	private String UPDATE_NOTAENTRADA_ERRO_XML = "update notaentradanfe set cofre = 2 where id = ?";
 
-	private String NFCE = "SELECT v.id, v.id_situacaonfce,v.id_venda, v.xml, v.chavenfce FROM pdv.vendanfce v join pdv.venda pv on v.id_venda = pv.id  WHERE v.id_situacaonfce <> 0 AND (v.cofre = 0 OR v.cofre is null) and pv.id_loja = ? and pv.data >= ? ORDER BY 1 DESC LIMIT 10";
+	private String NFCE = "SELECT v.id, v.id_situacaonfce,v.id_venda, v.xml, v.chavenfce FROM pdv.vendanfce v join pdv.venda pv on v.id_venda = pv.id  WHERE v.id_situacaonfce <> 0 AND v.transmitido = true  AND (v.cofre = 0 OR v.cofre is null) and pv.id_loja = ? and pv.data >= ? ORDER BY 1 DESC LIMIT 10";
 	private String UPDATE_NFCE = "update pdv.vendanfce set cofre = 1 where id = ?";
 	private String UPDATE_NFCE_ERRO_XML = "update pdv.vendanfce set cofre = 2 where id = ?";
 

@@ -21,6 +21,7 @@ public class Inicializacao {
 
 			// Iniciar uma thread para aguardar a tecla Enter
 			Thread thread = new Thread(() -> {
+				System.out.println("\n##############################   APP Dominio 2.0.0.6   ##############################");
 				System.out.print(
 						"\nSe está executando pela primeira vez ou deseja \nprosseguir com a aplicação aguarde \nou pressione S + Enter para abrir o configurador.");
 				valor = scanner.nextLine(); // Aguarda até que o Enter seja pressionado
@@ -75,7 +76,7 @@ public class Inicializacao {
 							Util u = new Util();
 							
 							u.apagaLog();
-							u.apagaXMLs();
+//							u.apagaXMLs();
 						}
 					}
 

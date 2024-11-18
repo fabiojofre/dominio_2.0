@@ -101,19 +101,19 @@ public class Autorizacao {
 					Response response = client.newCall(request).execute();
 					if(response.isSuccessful()) {
 						 chave = u.trataChaveIntegracao(new JSONObject(response.body().source().readUtf8().toString()));
-						 System.out.println(response.isSuccessful());
+//						 System.out.println(response.isSuccessful());
 						 System.out.println("Chave Gerada com sucesso!");
 						 UPDATE_CHAVE = "update dominio_api.token_dominio set integration_key = ? where id_loja = ?";
-					}if(!response.isSuccessful()) {
+						 System.out.println("Seguinte chave gerada: "+chave);
+					}else {
+						System.out.println("Erro na geracao da chave!\n");
+						System.out.println(response.body().source().readUtf8().toString());
+						chave ="";
 						
-						JOptionPane.showMessageDialog(null, response.body().source().readUtf8().toString());
-					
-					}
-					else {
-						chave = "";
 						System.out.println(response.isSuccessful());
 //						procedimento pra não dar update se houver chave em branco
 						UPDATE_CHAVE = "update dominio_api.token_dominio set integration_key = ? where id_loja = ? and id_loja = 999";
+						
 					}
 					response.body().close();
 					client.connectionPool().evictAll(); //limpa a piscina de conexao
@@ -125,6 +125,7 @@ public class Autorizacao {
 				try {
 					con.abrirConexao(Config.host, Config.porta, Config.base, Config.usuario, Config.senha);
 					PreparedStatement stmt_up = con.prepareStatement(UPDATE_CHAVE);
+//					System.out.println(UPDATE_CHAVE+"   -   "+ chave);
 					stmt_up.setString(1,chave);
 					stmt_up.setInt(2, id_loja);
 					int rowsInserted = stmt_up.executeUpdate();

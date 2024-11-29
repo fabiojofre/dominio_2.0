@@ -84,7 +84,7 @@ public class EnviaXML {
 						System.out.println("Status envio do XML - "+retornoEnvio.getStatus().getMessage()+": "+retornoEnvio.getStatus().getMessage());
 						Retorno ret = new Retorno();
 						System.out.println("Confirmando envio com id: "+retornoEnvio.getId());
-						for (int c = 3; c >= 0; c--) {
+						for (int c = 5; c >= 0; c--) {
 							Thread.sleep(1000);
 							System.out.print(".");
 						}
@@ -93,6 +93,10 @@ public class EnviaXML {
 						System.out.println(status);
 						while (ret.getFilesExpanded().getApiStatus().getCode().equals("SA1")||ret.getFilesExpanded()== null ) { // enquanto esse xml n�o for processado ele continua enviando
 							System.out.println("Nova tentativa de confirmacao de processamento...");
+							for (int c = 10; c >= 0; c--) {
+								Thread.sleep(1000);
+								System.out.print(".");
+							}
 							ret = aut.confirmaProcessamento(loja.getToken(), loja.getIntegration_key(), retornoEnvio.getId()); 
 							System.out.println(status);
 						}
